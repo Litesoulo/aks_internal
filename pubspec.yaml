@@ -8,10 +8,14 @@ environment:
   flutter: ^3.24.0
 
 dependencies:
+  cached_network_image: ^3.4.1
+
   flutter:
     sdk: flutter
-  
+
   l: ^5.0.0
+
+  octo_image: ^2.1.0
 
 dev_dependencies:
   flutter_test:
