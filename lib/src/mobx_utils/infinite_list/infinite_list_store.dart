@@ -101,7 +101,7 @@ abstract class _InfiniteListStoreBase<T> with Store {
       final fetchedItems = await itemsFuture;
       items.addAll(fetchedItems);
 
-      currentOffset = (currentOffset ?? 0) + limit;
+      currentOffset = (currentOffset ?? 0) + fetchedItems.length;
       hasReachedMax = fetchedItems.length < limit;
     } catch (_) {
       if (handleError && refresh) {
