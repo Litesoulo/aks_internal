@@ -102,6 +102,8 @@ abstract class _InfiniteListStoreBase<T> with Store {
       if (handleError && refresh) {
         items = _backupItems;
       }
+
+      rethrow;
     }
   }
 
