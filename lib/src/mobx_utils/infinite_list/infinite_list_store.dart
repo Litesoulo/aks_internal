@@ -1,127 +1,132 @@
+import 'dart:async';
 import 'package:mobx/mobx.dart';
 
 part 'infinite_list_store.g.dart';
 
-/// A function type for fetching paginated data for an infinite list.
+/// Type definition for the data fetcher function.
 ///
-/// [offset] specifies the starting point for fetching items.
-/// [limit] specifies the maximum number of items to fetch in one request.
-///
-/// Returns a [Future] containing a list of items of type [T].
+/// [offset] specifies the starting point for fetching data.
+/// [limit] defines the maximum number of items to fetch.
+/// Returns a `Future` that resolves to a list of items of type [T].
 typedef InfiniteListDataFetcher<T> = Future<List<T>> Function({int? offset, int? limit});
 
-/// A MobX store for managing infinite scrolling data.
+/// A store to manage infinite scrolling lists using MobX.
 ///
-/// This store handles fetching, refreshing, and paginating data while maintaining state consistency.
-/// It supports error handling, and ensures data can be restored to the last valid state when an error occurs.
+/// This store handles paginated data fetching, maintains the state of the list,
+/// and provides support for refreshing and error handling.
 ///
-/// [T] specifies the type of items being managed.
+/// [T] is the type of items in the list.
 class InfiniteListStore<T> = _InfiniteListStoreBase<T> with _$InfiniteListStore;
 
 abstract class _InfiniteListStoreBase<T> with Store {
-  /// Creates an instance of [InfiniteListStore].
+  /// Constructs an instance of [_InfiniteListStoreBase].
   ///
-  /// [fetchData] is the function used to fetch data for the list.
-  /// [limit] defines the maximum number of items to fetch per request (default is 30).
+  /// [fetchData] is the function used to fetch data. It must be provided.
+  /// [limit] specifies the number of items to fetch per page. Defaults to 30.
   _InfiniteListStoreBase({
     required this.fetchData,
     this.limit = 30,
   });
 
-  /// The function used to fetch data for the list.
+  /// The function used to fetch data.
   final InfiniteListDataFetcher<T> fetchData;
 
-  /// The maximum number of items to fetch per request.
+  /// The maximum number of items to fetch in a single request.
   final int limit;
 
-  /// The total number of items currently in the list.
+  /// Total number of items currently loaded in the list.
   @computed
   int get itemCount => items.length;
 
-  /// Indicates whether the store is currently loading initial data.
+  /// Indicates if a data fetch operation is currently in progress.
   @computed
-  bool get isLoading => itemsFuture.status == FutureStatus.pending && items.isEmpty;
+  bool get isBusy => itemsFuture.status == FutureStatus.pending;
 
-  /// Indicates whether the store is loading more data (pagination).
+  /// Indicates if the first load of data is in progress.
   @computed
-  bool get isLoadingMore => itemsFuture.status == FutureStatus.pending && items.isNotEmpty;
+  bool get isFirstLoad => isBusy && items.isEmpty;
 
-  /// Indicates if the last fetch operation resulted in an error.
+  /// Indicates if data is currently being paginated (loaded incrementally).
+  @computed
+  bool get isPaging => isBusy && items.isNotEmpty;
+
+  /// Indicates if the last fetch operation encountered an error.
   @computed
   bool get hasError => itemsFuture.status == FutureStatus.rejected;
 
-  /// Whether the end of the data has been reached.
-  @readonly
+  /// Indicates whether all available data has been loaded.
+  @observable
   bool hasReachedMax = false;
 
-  /// The current offset for the next fetch operation.
-  @readonly
+  /// The current offset for pagination, representing the starting index for the next fetch.
+  @observable
   int? currentOffset;
 
-  /// The items currently in the list.
-  @readonly
-  ObservableList<T> items = ObservableList.of([]);
+  /// The list of items currently loaded.
+  @observable
+  ObservableList<T> items = ObservableList<T>.of([]);
 
-  /// A backup of the last valid state of the items.
-  @readonly
-  ObservableList<T> _backupItems = ObservableList.of([]);
+  /// A backup of the items list, used during refresh operations.
+  @observable
+  ObservableList<T> _backupItems = ObservableList<T>.of([]);
 
-  /// The current future representing the fetch operation.
-  @readonly
+  /// The future representing the current fetch operation.
+  @observable
   ObservableFuture<List<T>> itemsFuture = ObservableFuture.value([]);
 
-  /// Fetches items from the data source and updates the store.
+  /// Fetches data and updates the store's state.
   ///
-  /// If [refresh] is true, the store resets before fetching new data.
-  /// If [hasReachedMax] is true and [refresh] is false, the fetch is skipped.
-  /// If [handleError] is true, restores the last valid state in case of an error.
+  /// [refresh]: If `true`, clears the current list and reloads data.
+  /// [handleError]: If `true`, restores the backup state on errors during refresh.
   @action
   Future<void> fetch({bool refresh = false, bool handleError = true}) async {
     if (hasReachedMax && !refresh) return;
-
-    if (isLoadingMore) return;
+    if (isBusy && !refresh) return; // Ignore concurrent fetch if not refresh
+    if (isFirstLoad) return; // Prioritize refresh
 
     if (refresh) {
       reset(backup: handleError);
     }
 
     try {
-      itemsFuture = ObservableFuture(
-        fetchData(
-          offset: currentOffset,
-          limit: limit,
-        ),
+      final future = fetchData(
+        offset: currentOffset,
+        limit: limit,
       );
 
-      final fetchedItems = await itemsFuture;
-      items.addAll(fetchedItems);
+      itemsFuture = ObservableFuture(future);
+      final fetchedItems = await future;
 
-      currentOffset = (currentOffset ?? 0) + fetchedItems.length;
-      hasReachedMax = fetchedItems.length < limit;
-    } catch (_) {
-      if (handleError && refresh) {
-        items = _backupItems;
+      if (refresh) {
+        items = ObservableList<T>.of(fetchedItems);
+      } else {
+        items.addAll(fetchedItems);
       }
 
+      currentOffset = refresh ? fetchedItems.length : (currentOffset ?? 0) + fetchedItems.length;
+      hasReachedMax = fetchedItems.length < limit;
+    } catch (error) {
+      if (handleError && refresh) {
+        items = ObservableList<T>.of(_backupItems);
+        currentOffset = _backupItems.length;
+        hasReachedMax = false;
+      }
       rethrow;
     }
   }
 
-  /// Refreshes the store by fetching the latest data.
-  ///
-  /// This method is a shortcut for calling [fetch] with [refresh] set to true.
+  /// Refreshes the list by clearing the current items and reloading data.
   @action
   Future<void> refresh() => fetch(refresh: true);
 
   /// Resets the store to its initial state.
   ///
-  /// Clears the current items, offset, and related states while optionally backing up the existing state.
-  /// If [backup] is false, the previous state will not be saved.
+  /// [backup]: If `true`, saves a backup of the current items before clearing the list.
   void reset({bool backup = true}) {
     if (backup) {
-      _backupItems = items;
+      _backupItems = ObservableList<T>.of(items);
     }
-    items = ObservableList.of(<T>[]);
+    items = ObservableList<T>.of([]);
     currentOffset = null;
     hasReachedMax = false;
   }

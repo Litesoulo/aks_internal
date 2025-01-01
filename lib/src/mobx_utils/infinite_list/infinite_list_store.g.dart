@@ -16,19 +16,25 @@ mixin _$InfiniteListStore<T> on _InfiniteListStoreBase<T>, Store {
       (_$itemCountComputed ??= Computed<int>(() => super.itemCount,
               name: '_InfiniteListStoreBase.itemCount'))
           .value;
-  Computed<bool>? _$isLoadingComputed;
+  Computed<bool>? _$isBusyComputed;
 
   @override
-  bool get isLoading =>
-      (_$isLoadingComputed ??= Computed<bool>(() => super.isLoading,
-              name: '_InfiniteListStoreBase.isLoading'))
+  bool get isBusy => (_$isBusyComputed ??= Computed<bool>(() => super.isBusy,
+          name: '_InfiniteListStoreBase.isBusy'))
+      .value;
+  Computed<bool>? _$isFirstLoadComputed;
+
+  @override
+  bool get isFirstLoad =>
+      (_$isFirstLoadComputed ??= Computed<bool>(() => super.isFirstLoad,
+              name: '_InfiniteListStoreBase.isFirstLoad'))
           .value;
-  Computed<bool>? _$isLoadingMoreComputed;
+  Computed<bool>? _$isPagingComputed;
 
   @override
-  bool get isLoadingMore =>
-      (_$isLoadingMoreComputed ??= Computed<bool>(() => super.isLoadingMore,
-              name: '_InfiniteListStoreBase.isLoadingMore'))
+  bool get isPaging =>
+      (_$isPagingComputed ??= Computed<bool>(() => super.isPaging,
+              name: '_InfiniteListStoreBase.isPaging'))
           .value;
   Computed<bool>? _$hasErrorComputed;
 
@@ -149,8 +155,9 @@ currentOffset: ${currentOffset},
 items: ${items},
 itemsFuture: ${itemsFuture},
 itemCount: ${itemCount},
-isLoading: ${isLoading},
-isLoadingMore: ${isLoadingMore},
+isBusy: ${isBusy},
+isFirstLoad: ${isFirstLoad},
+isPaging: ${isPaging},
 hasError: ${hasError}
     ''';
   }
