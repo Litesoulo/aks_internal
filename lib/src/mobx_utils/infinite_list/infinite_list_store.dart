@@ -51,27 +51,22 @@ abstract class _InfiniteListStoreBase<T> with Store {
   bool get hasError => itemsFuture.status == FutureStatus.rejected;
 
   /// Whether the end of the data has been reached.
-  @observable
   @readonly
   bool hasReachedMax = false;
 
   /// The current offset for the next fetch operation.
-  @observable
   @readonly
   int? currentOffset;
 
   /// The items currently in the list.
-  @observable
   @readonly
   ObservableList<T> items = ObservableList.of([]);
 
   /// A backup of the last valid state of the items.
-  @observable
   @readonly
   ObservableList<T> _backupItems = ObservableList.of([]);
 
   /// The current future representing the fetch operation.
-  @observable
   @readonly
   ObservableFuture<List<T>> itemsFuture = ObservableFuture.value([]);
 
