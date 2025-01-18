@@ -10,7 +10,7 @@ mixin ParseObjectComparison on ParseObject {
   ///
   /// Returns `true` if the `objectId` values of both instances match,
   /// otherwise returns `false`.
-  bool compareId(ParseObject other) => this.objectId == other.objectId;
+  bool compareId(ParseObject other) => objectId == other.objectId;
 
   /// List of property names used for equality and hash code calculation.
   List<String> get compareKeys;
