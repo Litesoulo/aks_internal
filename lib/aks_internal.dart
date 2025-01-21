@@ -3,6 +3,7 @@ library;
 
 export 'src/aks_internal.dart';
 export 'src/mobx_utils/data_fetcher/data_fetcher_store.dart' show DataFetcherStore;
+export 'src/mobx_utils/data_fetcher/single_data_fetcher_store.dart' show SingleDataFetcherStore;
 export 'src/mobx_utils/infinite_list/infinite_list_store.dart' show InfiniteListStore;
 export 'src/parse_sdk_base/parse_error_exception.dart' show ParseErrorException;
 export 'src/parse_sdk_base/parse_filter/parse_query_builder.dart'
