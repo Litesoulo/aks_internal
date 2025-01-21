@@ -19,4 +19,5 @@ export 'src/parse_sdk_base/parse_sdk_base.dart' show ParseSdkBase;
 export 'src/parse_utils/parse_object_comparison.dart' show ParseObjectComparison;
 export 'src/utils/logger/aks_logger.dart' show AksLogger;
 export 'src/widget/cached_image.dart' show CachedImage;
+export 'src/widget/data_list/data_list_widget.dart' show DataListWidget;
 export 'src/widget/infinite_list/infinite_list_widget.dart' show InfiniteListWidget;
