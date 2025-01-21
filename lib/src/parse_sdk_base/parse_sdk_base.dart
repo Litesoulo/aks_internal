@@ -58,9 +58,9 @@ abstract base class ParseSdkBase<T extends ParseObject> {
 
   /// Constructs a [QueryBuilder] based on the provided [ParseQueryBuilder].
   QueryBuilder<T> _buildQuery({
+    required ParseQueryBuilder builder,
     int? limit,
     int? offset,
-    required ParseQueryBuilder builder,
   }) {
     final query = QueryBuilder<T>(_objectConstructor() as T);
 
