@@ -6,6 +6,10 @@ import 'package:shimmer/shimmer.dart';
 // Mock configuration for testing
 AksAppConfig createMockConfig() {
   return AksAppConfig(
+    aksDefaultBuilders: AksDefaultBuilders(
+      horizontalSeparatorBuilder: (_, __) => Space.empty,
+      verticalSeparatorBuilder: (_, __) => Space.empty,
+    ),
     appConstants: AksAppConstants(
       verticalSeparator: const SizedBox.shrink(),
       horizontalSeparator: const SizedBox.shrink(),

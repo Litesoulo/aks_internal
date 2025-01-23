@@ -37,6 +37,7 @@ class DataListWidget<T> extends StatelessWidget {
     required this.store,
     super.key,
     this.padding,
+    this.scrollDirection = Axis.vertical,
   });
 
   /// The store that manages the state of the list and fetches data.
@@ -58,10 +59,18 @@ class DataListWidget<T> extends StatelessWidget {
   final Widget Function(BuildContext context, T item) itemBuilder;
 
   /// Builder for rendering separators between list items.
-  final Widget Function(BuildContext context, int index) separatorBuilder;
+  final Widget Function(BuildContext context, int index)? separatorBuilder;
+
+  /// An optional [Axis] to be used by the internal [ScrollView] that defines the axis of scroll.
+  final Axis scrollDirection;
 
   @override
   Widget build(BuildContext context) {
+    final config = AksInternal.config;
+    final builders = config.aksDefaultBuilders;
+    final defaultSeparatorBuilder =
+        scrollDirection == Axis.horizontal ? builders.horizontalSeparatorBuilder : builders.verticalSeparatorBuilder;
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 400),
       child: Observer(
@@ -85,7 +94,8 @@ class DataListWidget<T> extends StatelessWidget {
               final item = store.items[index];
               return itemBuilder(context, item);
             },
-            separatorBuilder: separatorBuilder,
+            scrollDirection: scrollDirection,
+            separatorBuilder: separatorBuilder ?? defaultSeparatorBuilder,
           );
         },
       ),

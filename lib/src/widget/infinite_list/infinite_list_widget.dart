@@ -1,4 +1,4 @@
-import 'package:aks_internal/src/mobx_utils/infinite_list/infinite_list_store.dart';
+import 'package:aks_internal/aks_internal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
@@ -33,6 +33,8 @@ class InfiniteListWidget<T> extends StatelessWidget {
     this.errorBuilder,
     this.separatorBuilder,
     this.scrollDirection = Axis.vertical,
+    this.width,
+    this.height,
   });
 
   /// The store that manages the state of the infinite list and fetches data.
@@ -59,31 +61,45 @@ class InfiniteListWidget<T> extends StatelessWidget {
   /// An optional [Axis] to be used by the internal [ScrollView] that defines the axis of scroll.
   final Axis scrollDirection;
 
+  /// If non-null, requires the child to have exactly this height.
+  final double? height;
+
+  /// If non-null, requires the child to have exactly this width.
+  final double? width;
+
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) {
-        return InfiniteList(
-          itemCount: store.itemCount,
-          isLoading: store.isBusy,
-          onFetchData: store.hasReachedMax ? _emptyCallback : store.fetch,
-          separatorBuilder: separatorBuilder,
-          loadingBuilder: loadingBuilder,
-          emptyBuilder: emptyBuilder,
-          errorBuilder: errorBuilder,
-          hasError: store.hasError,
-          centerEmpty: true,
-          centerError: true,
-          centerLoading: true,
-          hasReachedMax: store.hasReachedMax,
-          padding: padding,
-          scrollDirection: this.scrollDirection,
-          itemBuilder: (context, index) => itemBuilder(
-            context,
-            store.items[index],
-          ),
-        );
-      },
+    final config = AksInternal.config;
+    final builders = config.aksDefaultBuilders;
+    final defaultSeparatorBuilder =
+        scrollDirection == Axis.horizontal ? builders.horizontalSeparatorBuilder : builders.verticalSeparatorBuilder;
+
+    return SizedBox(
+      height: height,
+      width: width,
+      child: Observer(
+        builder: (_) {
+          return InfiniteList(
+            itemCount: store.itemCount,
+            isLoading: store.isBusy,
+            onFetchData: store.hasReachedMax ? _emptyCallback : store.fetch,
+            separatorBuilder: separatorBuilder ?? defaultSeparatorBuilder,
+            loadingBuilder: loadingBuilder,
+            emptyBuilder: emptyBuilder,
+            errorBuilder: errorBuilder,
+            hasError: store.hasError,
+            centerEmpty: true,
+            centerError: true,
+            hasReachedMax: store.hasReachedMax,
+            padding: padding ?? EdgeInsets.all(config.appConstants.padding),
+            scrollDirection: this.scrollDirection,
+            itemBuilder: (context, index) => itemBuilder(
+              context,
+              store.items[index],
+            ),
+          );
+        },
+      ),
     );
   }
 }
