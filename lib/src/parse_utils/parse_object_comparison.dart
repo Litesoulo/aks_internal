@@ -1,33 +1,26 @@
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
-/// Mixin to compare ParseObject instances based on specific properties.
-///
-/// This mixin provides functionality for custom equality and hash code
-/// generation based on the properties defined in `compareKeys`. It also
-/// includes a method for directly comparing object IDs.
+/// A mixin for comparing Parse objects based on their properties and IDs.
 mixin ParseObjectComparison on ParseObject {
-  /// Compares the `objectId` of this instance with another `ParseObject`.
+  /// Compares the `objectId` of the current object with another ParseObject's `objectId`.
   ///
-  /// Returns `true` if the `objectId` values of both instances match,
-  /// otherwise returns `false`.
+  /// Returns `true` if the IDs are the same, otherwise returns `false`.
   bool compareId(ParseObject other) => objectId == other.objectId;
-
-  /// List of property names used for equality and hash code calculation.
-  List<String> get compareKeys;
-
-  /// Default properties always included in comparison.
-  final List<String> _defaultProps = [keyVarObjectId];
-
-  /// Combined list of properties for comparison and hash generation.
-  List<String> get _allKeys => [...compareKeys, ..._defaultProps];
 
   @override
   bool operator ==(Object other) {
+    // Checks if the current object is identical to the other.
     if (identical(this, other)) return true;
+
+    // Returns false if the types don't match.
     if (runtimeType != other.runtimeType) return false;
+
+    // Returns false if the other object is not a ParseObject.
     if (other is! ParseObject) return false;
 
-    for (final key in _allKeys) {
+    // Compares the properties of both objects.
+    final properties = toJson();
+    for (final key in properties.keys) {
       if (get<dynamic>(key) != other.get<dynamic>(key)) {
         return false;
       }
@@ -37,9 +30,7 @@ mixin ParseObjectComparison on ParseObject {
   }
 
   @override
-  int get hashCode {
-    return Object.hashAll(
-      _allKeys.map((property) => get<dynamic>(property)),
-    );
-  }
+  int get hashCode => Object.hashAll(
+        toJson().keys.map(get),
+      );
 }
