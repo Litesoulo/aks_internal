@@ -27,11 +27,13 @@ void main() {
   // Test the ShimmerContainer widget
   testWidgets('ShimmerContainer renders with default values', (WidgetTester tester) async {
     // Build the ShimmerContainer widget with default values
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: ShimmerContainer(),
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: ShimmerContainer(),
+        ),
       ),
-    ));
+    );
 
     // Verify that a shimmer effect is visible
     expect(find.byType(Shimmer), findsOneWidget);
@@ -55,19 +57,21 @@ void main() {
     const customHighlightColor = Colors.green;
     const customPeriod = Duration(seconds: 2);
 
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: ShimmerContainer(
-          width: customWidth,
-          height: customHeight,
-          borderRadius: customBorderRadius,
-          backgroundColor: customBackgroundColor,
-          baseColor: customBaseColor,
-          highlightColor: customHighlightColor,
-          period: customPeriod,
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: ShimmerContainer(
+            width: customWidth,
+            height: customHeight,
+            borderRadius: customBorderRadius,
+            backgroundColor: customBackgroundColor,
+            baseColor: customBaseColor,
+            highlightColor: customHighlightColor,
+            period: customPeriod,
+          ),
         ),
       ),
-    ));
+    );
 
     // Verify if custom values are applied correctly
     final shimmerContainer = tester.widget<ShimmerContainer>(find.byType(ShimmerContainer));
@@ -86,11 +90,13 @@ void main() {
   testWidgets('ShimmerContainer renders with child widget', (WidgetTester tester) async {
     // Build the ShimmerContainer with a custom child
     const child = Text('Shimmering text');
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: ShimmerContainer(child: child),
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: ShimmerContainer(child: child),
+        ),
       ),
-    ));
+    );
 
     // Check if the child widget is rendered correctly
     expect(find.byWidget(child), findsOneWidget);
@@ -99,13 +105,15 @@ void main() {
   testWidgets('ShimmerContainer has correct border radius', (WidgetTester tester) async {
     const customBorderRadius = 20.0;
 
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: ShimmerContainer(
-          borderRadius: customBorderRadius,
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: ShimmerContainer(
+            borderRadius: customBorderRadius,
+          ),
         ),
       ),
-    ));
+    );
 
     // Verify the container's border radius
     final container = tester.widget<DecoratedBox>(find.byType(DecoratedBox));

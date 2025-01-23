@@ -117,7 +117,7 @@ void main() {
     for (final item in items) {
       await tester.scrollUntilVisible(
         find.byKey(ValueKey(item)), // Find the item
-        50.0, // Scroll by 50 pixels
+        50, // Scroll by 50 pixels
         scrollable: scrollableFinder,
       );
 
@@ -154,10 +154,10 @@ void main() {
     final scrollableFinder = find.byType(Scrollable);
 
     // Verify each separator is present by scrolling
-    for (int i = 0; i < items.length - 1; i++) {
+    for (var i = 0; i < items.length - 1; i++) {
       await tester.scrollUntilVisible(
         find.byKey(ValueKey('separator-$i')), // Find the separator
-        50.0, // Scroll by 50 pixels
+        50, // Scroll by 50 pixels
         scrollable: scrollableFinder,
       );
 
@@ -211,7 +211,7 @@ void main() {
     for (final item in additionalItems) {
       await tester.scrollUntilVisible(
         find.byKey(ValueKey('item-$item')), // Corrected key format
-        100.0, // Scroll by 100 pixels to bring the item into view
+        100, // Scroll by 100 pixels to bring the item into view
         scrollable: scrollableFinder,
       );
 
