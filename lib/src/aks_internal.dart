@@ -1,36 +1,42 @@
 import 'package:aks_internal/aks_internal.dart';
 
 /// {@template aks_internal}
-/// Shared utilities for Flutter apps.
-///
-/// This class implements a singleton pattern to ensure only one instance
-/// is created and shared throughout the application.
+/// Shared utilities for Flutter apps, implementing a singleton pattern.
+/// This class ensures only one instance is created and shared throughout
+/// the application, maintaining a consistent configuration across the app.
 /// {@endtemplate}
 class AksInternal {
-  /// Factory constructor to return the singleton instance.
+  /// Factory constructor to return the singleton instance of [AksInternal].
   ///
-  /// Always returns the same instance of [AksInternal].
-  factory AksInternal() => _instance;
+  /// This constructor ensures that only one instance of [AksInternal] is
+  /// created and shared across the entire application. The provided
+  /// [aksConfig] will be assigned to the singleton instance's configuration.
+  ///
+  /// - [aksConfig]: The configuration to be assigned to the instance.
+  factory AksInternal({required AksAppConfig aksConfig}) {
+    // Initialize the config only if it hasn't been initialized yet
+    _instance._config ??= aksConfig;
+
+    return _instance;
+  }
 
   /// Private internal constructor for the singleton pattern.
   ///
-  /// Prevents external instantiation of the class.
+  /// This constructor prevents external instantiation of [AksInternal].
+  /// The singleton instance is created via the factory constructor.
   AksInternal._internal();
 
   /// The singleton instance of [AksInternal].
+  ///
+  /// This instance is the only one used throughout the application.
   static final AksInternal _instance = AksInternal._internal();
 
-  /// Initializes the [AksInternal] singleton with optional configurations.
+  /// The configuration associated with the singleton instance.
   ///
-  /// Use this method to set up dependencies or configurations
-  /// necessary for the application. If a [config] is provided,
-  /// logs an initialization message.
+  /// This [AksAppConfig] object holds the necessary configuration for the app.
   ///
-  /// - [config]: Optional application configurations.
-  void initialize({AksAppConfig? config}) {
-    // Perform any setup actions here, e.g., setting up dependencies.
-    if (config != null) {
-      AksLogger.i('AksInternal initialized');
-    }
-  }
+  static AksAppConfig get config => _instance._config!;
+
+  // We change _config to be nullable to allow for checking before initialization.
+  AksAppConfig? _config;
 }

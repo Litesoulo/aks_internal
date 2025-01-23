@@ -28,3 +28,4 @@ export 'src/widget/cached_image.dart' show CachedImage;
 export 'src/widget/data_list/data_list_widget.dart' show DataListWidget;
 export 'src/widget/data_list/single_data_widget.dart' show SingleDataWidget;
 export 'src/widget/infinite_list/infinite_list_widget.dart' show InfiniteListWidget;
+export 'src/widget/shimmer_container.dart' show ShimmerContainer;
