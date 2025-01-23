@@ -32,6 +32,7 @@ class InfiniteListWidget<T> extends StatelessWidget {
     this.loadingBuilder,
     this.errorBuilder,
     this.separatorBuilder,
+    this.scrollDirection = Axis.vertical,
   });
 
   /// The store that manages the state of the infinite list and fetches data.
@@ -55,6 +56,9 @@ class InfiniteListWidget<T> extends StatelessWidget {
   /// Builder for rendering separators between list items.
   final Widget Function(BuildContext context, int index)? separatorBuilder;
 
+  /// An optional [Axis] to be used by the internal [ScrollView] that defines the axis of scroll.
+  final Axis scrollDirection;
+
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -73,6 +77,7 @@ class InfiniteListWidget<T> extends StatelessWidget {
           centerLoading: true,
           hasReachedMax: store.hasReachedMax,
           padding: padding,
+          scrollDirection: this.scrollDirection,
           itemBuilder: (context, index) => itemBuilder(
             context,
             store.items[index],
