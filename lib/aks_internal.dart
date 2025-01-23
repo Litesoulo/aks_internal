@@ -1,7 +1,9 @@
 /// Shared utilities for Flutter apps.
 library;
 
-export 'src/aks_internal.dart';
+export 'src/aks_internal.dart' show AksInternal;
+export 'src/data/aks_app_config.dart' show AksAppConfig;
+export 'src/data/aks_app_constants.dart' show AksAppConstants;
 export 'src/mobx_utils/data_fetcher/data_fetcher_store.dart' show DataFetcherStore;
 export 'src/mobx_utils/data_fetcher/single_data_fetcher_store.dart' show SingleDataFetcherStore;
 export 'src/mobx_utils/infinite_list/infinite_list_store.dart' show InfiniteListStore;
