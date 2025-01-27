@@ -15,7 +15,7 @@ void main() {
       // Arrange
       await tester.pumpWidget(
         const MaterialApp(
-          home: CachedImage(
+          home: AksCachedImage(
             imageUrl: imageUrl,
           ),
         ),
@@ -34,7 +34,7 @@ void main() {
       const placeholderKey = Key('placeholder');
       await tester.pumpWidget(
         MaterialApp(
-          home: CachedImage(
+          home: AksCachedImage(
             imageUrl: imageUrl,
             placeholderBuilder: (context) => const Center(
               key: placeholderKey,
@@ -56,7 +56,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: CachedImage(
+          home: AksCachedImage(
             imageUrl: 'https://invalid-url',
             cachedImageProvider: cachedImageProvider,
             errorBuilder: (context, error, stackTrace) => const Center(
@@ -81,7 +81,7 @@ void main() {
       const height = 100.0;
       await tester.pumpWidget(
         const MaterialApp(
-          home: CachedImage(
+          home: AksCachedImage(
             imageUrl: imageUrl,
             width: width,
             height: height,
@@ -101,7 +101,7 @@ void main() {
       const color = Colors.red;
       await tester.pumpWidget(
         const MaterialApp(
-          home: CachedImage(
+          home: AksCachedImage(
             imageUrl: imageUrl,
             fit: boxFit,
             color: color,

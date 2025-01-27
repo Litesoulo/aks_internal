@@ -34,7 +34,7 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: ShimmerContainer(),
+          body: AksShimmerContainer(),
         ),
       ),
     );
@@ -43,7 +43,7 @@ void main() {
     expect(find.byType(Shimmer), findsOneWidget);
 
     // Check if the default background color is applied (primary color with reduced alpha)
-    final shimmerContainer = tester.widget<ShimmerContainer>(find.byType(ShimmerContainer));
+    final shimmerContainer = tester.widget<AksShimmerContainer>(find.byType(AksShimmerContainer));
     expect(shimmerContainer.backgroundColor, null);
 
     // Check if the default duration is applied (1 second)
@@ -64,7 +64,7 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: ShimmerContainer(
+          body: AksShimmerContainer(
             width: customWidth,
             height: customHeight,
             borderRadius: customBorderRadius,
@@ -78,7 +78,7 @@ void main() {
     );
 
     // Verify if custom values are applied correctly
-    final shimmerContainer = tester.widget<ShimmerContainer>(find.byType(ShimmerContainer));
+    final shimmerContainer = tester.widget<AksShimmerContainer>(find.byType(AksShimmerContainer));
     expect(shimmerContainer.width, customWidth);
     expect(shimmerContainer.height, customHeight);
     expect(shimmerContainer.borderRadius, customBorderRadius);
@@ -97,7 +97,7 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: ShimmerContainer(child: child),
+          body: AksShimmerContainer(child: child),
         ),
       ),
     );
@@ -112,7 +112,7 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: ShimmerContainer(
+          body: AksShimmerContainer(
             borderRadius: customBorderRadius,
           ),
         ),

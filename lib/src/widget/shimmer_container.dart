@@ -13,8 +13,8 @@ import 'package:shimmer/shimmer.dart';
 /// be configured to customize the base and highlight colors, animation period, and
 /// other visual aspects.
 /// {@endtemplate}
-class ShimmerContainer extends StatelessWidget {
-  /// Creates a [ShimmerContainer] widget.
+class AksShimmerContainer extends StatelessWidget {
+  /// Creates a [AksShimmerContainer] widget.
   ///
   /// The widget displays a shimmer effect over a container that can optionally contain
   /// a child widget. You can customize the appearance of the shimmer effect and the
@@ -28,7 +28,7 @@ class ShimmerContainer extends StatelessWidget {
   /// - [highlightColor]: The highlight color for the shimmer effect.
   /// - [period]: The duration of the shimmer animation.
   /// - [child]: The child widget to be displayed inside the container.
-  const ShimmerContainer({
+  const AksShimmerContainer({
     super.key,
     this.width,
     this.height,

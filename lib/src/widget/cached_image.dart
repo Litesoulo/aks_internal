@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
 
 /// A widget that displays an image from a URL.
-class CachedImage extends StatelessWidget {
+class AksCachedImage extends StatelessWidget {
   /// Creates a widget that displays an image from a URL.
-  const CachedImage({
+  const AksCachedImage({
     /// The URL of the image to display.
     required this.imageUrl,
 
