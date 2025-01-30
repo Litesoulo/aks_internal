@@ -3,22 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shimmer/shimmer.dart';
 
-// Mock configuration for testing
-AksAppConfig createMockConfig() {
-  return AksAppConfig(
-    aksDefaultBuilders: AksDefaultBuilders(
-      horizontalSeparatorBuilder: (_, __) => Space.empty,
-      verticalSeparatorBuilder: (_, __) => Space.empty,
-    ),
-    appConstants: AksAppConstants(
-      verticalSeparator: const SizedBox.shrink(),
-      horizontalSeparator: const SizedBox.shrink(),
-      borderRadius: 10,
-      padding: 8,
-      animationDuration: const Duration(seconds: 1),
-    ),
-  );
-}
+import '../utils/test_utils.dart';
 
 void main() {
   // Set up the mock configuration and initialize AksInternal once

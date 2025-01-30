@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../utils/test_utils.dart';
+
 class MockDataFetcher extends Mock {
   Future<List<String>> call();
 }
@@ -16,6 +18,10 @@ void main() {
   setUp(() {
     mockDataFetcher = MockDataFetcher();
     store = DataFetcherStore<String>(dataFetcher: mockDataFetcher.call);
+
+    final mockConfig = createMockConfig();
+    // Initialize the singleton with the mock config only once
+    AksInternal(aksConfig: mockConfig); // This can be skipped if initialize() is automatically called by the factory.
   });
 
   Widget createWidgetUnderTest() {
@@ -62,6 +68,42 @@ void main() {
 
       // Assert
       expect(find.text('Error occurred'), findsOneWidget);
+    });
+
+    testWidgets('Displays custom widget when customBuilder is provided', (tester) async {
+      // Arrange
+      when(() => mockDataFetcher.call()).thenAnswer((_) async => ['Item 1', 'Item 2', 'Item 3']);
+
+      // Define a custom builder that returns a Column with the items
+      Widget customBuilder(BuildContext context, List<String> items) {
+        return Column(
+          children: items.map(Text.new).toList(),
+        );
+      }
+
+      // Create the widget under test with the customBuilder
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: DataListWidget<String>(
+              store: store,
+              loadingBuilder: (context) => const CircularProgressIndicator(),
+              customBuilder: customBuilder,
+              separatorBuilder: (context, index) => const Divider(),
+            ),
+          ),
+        ),
+      );
+
+      // Act
+      await tester.runAsync(() => store.fetch());
+      await tester.pump(); // Wait for the state update
+
+      // Assert
+      expect(find.text('Item 1'), findsOneWidget);
+      expect(find.text('Item 2'), findsOneWidget);
+      expect(find.text('Item 3'), findsOneWidget);
+      expect(find.byType(Column), findsOneWidget); // Ensure the custom builder's Column is used
     });
 
     testWidgets('Displays empty state when store fetch returns no items', (tester) async {
