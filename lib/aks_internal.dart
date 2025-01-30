@@ -29,3 +29,4 @@ export 'src/widget/data_list/data_list_widget.dart' show DataListWidget;
 export 'src/widget/data_list/single_data_widget.dart' show SingleDataWidget;
 export 'src/widget/infinite_list/infinite_list_widget.dart' show InfiniteListWidget;
 export 'src/widget/space.dart' show Space;
+export 'src/widget/splash_stack.dart' show SplashStack;
