@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_mobx: ^2.3.0
+  jiffy: ^6.3.2
   l: ^5.0.0
   mobx: ^2.5.0
   octo_image: ^2.1.0
