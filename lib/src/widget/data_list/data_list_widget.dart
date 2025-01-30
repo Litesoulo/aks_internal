@@ -30,16 +30,19 @@ class DataListWidget<T> extends StatelessWidget {
   /// If `null`, the default is an empty-sized box with 8 pixels of height.
   const DataListWidget({
     required this.loadingBuilder,
-    required this.itemBuilder,
     required this.store,
-    super.key,
     this.errorBuilder,
     this.separatorBuilder,
     this.emptyBuilder,
     this.customBuilder,
+    this.itemBuilder,
     this.padding,
     this.scrollDirection = Axis.vertical,
-  });
+    super.key,
+  }) : assert(
+          itemBuilder != null || customBuilder != null,
+          'Either itemBuilder or customBuilder must be provided.',
+        );
 
   /// The store that manages the state of the list and fetches data.
   final DataFetcherStore<T> store;
@@ -57,7 +60,7 @@ class DataListWidget<T> extends StatelessWidget {
   final Widget Function(BuildContext context)? errorBuilder;
 
   /// A builder function to render each list item.
-  final Widget Function(BuildContext context, T item) itemBuilder;
+  final Widget Function(BuildContext context, T item)? itemBuilder;
 
   /// A builder function to render list.
   final Widget Function(BuildContext context, List<T> item)? customBuilder;
@@ -100,7 +103,7 @@ class DataListWidget<T> extends StatelessWidget {
             itemCount: store.items.length,
             itemBuilder: (context, index) {
               final item = store.items[index];
-              return itemBuilder(context, item);
+              return itemBuilder!(context, item);
             },
             scrollDirection: scrollDirection,
             separatorBuilder: separatorBuilder ?? defaultSeparatorBuilder,
