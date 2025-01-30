@@ -37,6 +37,12 @@ class AksInternal {
   ///
   static AksAppConfig get config => _instance._config!;
 
+  /// Provides access to the application constants.
+  ///
+  /// This getter retrieves the [AksAppConstants] from the current configuration.
+  /// It ensures a centralized and consistent access point for app-wide constants.
+  static AksAppConstants get constants => config.appConstants;
+
   // We change _config to be nullable to allow for checking before initialization.
   AksAppConfig? _config;
 }
