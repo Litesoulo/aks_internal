@@ -1,12 +1,14 @@
 // ignore_for_file: strict_raw_type
 
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+
 part '_parse_query_builder.dart';
 
 /// A builder class to construct queries for interacting with the Parse Server.
 ///
 /// This class allows for flexible query construction by providing various
 /// filters, sorting options, and other query-related configurations.
-class ParseQueryBuilder {
+class ParseQueryBuilder<T extends ParseObject> {
   /// Constructs a [ParseQueryBuilder] instance with optional filters and configurations.
   ///
   /// - [containedInFilters]: Specifies filters for "contained in" conditions.
@@ -20,6 +22,9 @@ class ParseQueryBuilder {
   /// - [keysToInclude]: Specifies keys to include for nested objects in the results.
   /// - [orderByAscendingKeys]: Specifies keys for sorting results in ascending order.
   /// - [orderByDescendingKeys]: Specifies keys for sorting results in descending order.
+  /// - [extra]: A function that allows for additional customization of the [QueryBuilder].
+  ///   This function takes the current [QueryBuilder] instance and returns a modified version
+  ///   of it, enabling advanced query configurations not covered by the predefined filters.
   ParseQueryBuilder({
     this.containedInFilters,
     this.returnKeysFilter,
@@ -32,6 +37,7 @@ class ParseQueryBuilder {
     this.keysToInclude,
     this.orderByAscendingKeys,
     this.orderByDescendingKeys,
+    this.extra,
   });
 
   /// Filters to specify columns and values for "contained in" conditions.
@@ -66,4 +72,10 @@ class ParseQueryBuilder {
 
   /// A list of keys to sort the query results in descending order.
   final List<String>? orderByDescendingKeys;
+
+  /// A function that allows for additional customization of the [QueryBuilder].
+  ///
+  /// This function takes the current [QueryBuilder] instance and returns a modified version
+  /// of it, enabling advanced query configurations not covered by the predefined filters.
+  final QueryBuilder<T> Function(QueryBuilder<T> queryBuilder)? extra;
 }

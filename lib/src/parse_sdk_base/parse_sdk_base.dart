@@ -47,7 +47,7 @@ abstract base class ParseSdkBase<T extends ParseObject> {
 
   /// Fetches a list of [ParseObject]s of type [T] based on the [ParseQueryBuilder].
   Future<List<T>> fetchList({
-    required ParseQueryBuilder parseQueryBuilder,
+    required ParseQueryBuilder<T> parseQueryBuilder,
     int? limit,
     int? offset,
   }) async {
@@ -58,11 +58,11 @@ abstract base class ParseSdkBase<T extends ParseObject> {
 
   /// Constructs a [QueryBuilder] based on the provided [ParseQueryBuilder].
   QueryBuilder<T> _buildQuery({
-    required ParseQueryBuilder builder,
+    required ParseQueryBuilder<T> builder,
     int? limit,
     int? offset,
   }) {
-    final query = QueryBuilder<T>(_objectConstructor() as T);
+    var query = QueryBuilder<T>(_objectConstructor() as T);
 
     if (offset != null) {
       query.setAmountToSkip(offset);
@@ -74,6 +74,10 @@ abstract base class ParseSdkBase<T extends ParseObject> {
 
     _applySorting(query, builder);
     _applyFilters(query, builder);
+
+    if (builder.extra != null) {
+      query = builder.extra!(query);
+    }
 
     return query;
   }
