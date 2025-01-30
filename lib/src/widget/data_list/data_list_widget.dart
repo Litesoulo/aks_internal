@@ -29,12 +29,12 @@ class DataListWidget<T> extends StatelessWidget {
   /// [separatorBuilder] is a function for building the widget that separates items in the list.
   /// If `null`, the default is an empty-sized box with 8 pixels of height.
   const DataListWidget({
-    required this.errorBuilder,
-    required this.emptyBuilder,
     required this.loadingBuilder,
     required this.itemBuilder,
-    required this.separatorBuilder,
     required this.store,
+    this.errorBuilder,
+    this.separatorBuilder,
+    this.emptyBuilder,
     super.key,
     this.padding,
     this.scrollDirection = Axis.vertical,
@@ -47,13 +47,13 @@ class DataListWidget<T> extends StatelessWidget {
   final EdgeInsets? padding;
 
   /// Builder for rendering the empty state when there are no items to display.
-  final Widget Function(BuildContext context) emptyBuilder;
+  final Widget Function(BuildContext context)? emptyBuilder;
 
   /// Builder for rendering the loading state.
   final Widget Function(BuildContext context) loadingBuilder;
 
   /// Builder for rendering the error state when an error occurs during data fetch.
-  final Widget Function(BuildContext context) errorBuilder;
+  final Widget Function(BuildContext context)? errorBuilder;
 
   /// A builder function to render each list item.
   final Widget Function(BuildContext context, T item) itemBuilder;
@@ -80,11 +80,11 @@ class DataListWidget<T> extends StatelessWidget {
           }
 
           if (store.hasError) {
-            return errorBuilder.call(context);
+            return errorBuilder?.call(context) ?? Space.empty;
           }
 
           if (store.items.isEmpty) {
-            return emptyBuilder.call(context);
+            return emptyBuilder?.call(context) ?? Space.empty;
           }
 
           return ListView.separated(
