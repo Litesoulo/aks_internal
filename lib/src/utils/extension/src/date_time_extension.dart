@@ -95,7 +95,7 @@ extension DateTimeExtension on DateTime {
   /// DateTime(2023, 10, 15).startOfMonth; // Returns DateTime(2023, 10, 1)
   /// ```
   DateTime get startOfMonth {
-    return DateTime.utc(year, month, 1, 0, 0, 0, 0, 0);
+    return DateTime(year, month, 1, 0, 0, 0, 0, 0);
   }
 
   /// Returns the end of the month for the [DateTime].
@@ -116,7 +116,7 @@ extension DateTimeExtension on DateTime {
   /// DateTime(2023, 10, 15).startOfYear; // Returns DateTime(2023, 1, 1)
   /// ```
   DateTime get startOfYear {
-    return DateTime.utc(year, 1, 1, 0, 0, 0, 0, 0);
+    return DateTime(year, 1, 1, 0, 0, 0, 0, 0);
   }
 
   /// Returns the end of the year for the [DateTime].
@@ -137,7 +137,7 @@ extension DateTimeExtension on DateTime {
   /// DateTime(2023, 10, 15, 14, 30).startOfDay; // Returns DateTime(2023, 10, 15, 0, 0, 0, 0, 0)
   /// ```
   DateTime get startOfDay {
-    return DateTime.utc(year, month, day, 0, 0, 0, 0, 0);
+    return DateTime(year, month, day, 0, 0, 0, 0, 0);
   }
 
   /// Returns the end of the day for the [DateTime].
