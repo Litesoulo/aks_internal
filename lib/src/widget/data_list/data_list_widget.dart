@@ -32,10 +32,11 @@ class DataListWidget<T> extends StatelessWidget {
     required this.loadingBuilder,
     required this.itemBuilder,
     required this.store,
+    super.key,
     this.errorBuilder,
     this.separatorBuilder,
     this.emptyBuilder,
-    super.key,
+    this.customBuilder,
     this.padding,
     this.scrollDirection = Axis.vertical,
   });
@@ -57,6 +58,9 @@ class DataListWidget<T> extends StatelessWidget {
 
   /// A builder function to render each list item.
   final Widget Function(BuildContext context, T item) itemBuilder;
+
+  /// A builder function to render list.
+  final Widget Function(BuildContext context, List<T> item)? customBuilder;
 
   /// Builder for rendering separators between list items.
   final Widget Function(BuildContext context, int index)? separatorBuilder;
@@ -85,6 +89,10 @@ class DataListWidget<T> extends StatelessWidget {
 
           if (store.items.isEmpty) {
             return emptyBuilder?.call(context) ?? Space.empty;
+          }
+
+          if (customBuilder != null) {
+            return customBuilder!(context, store.items);
           }
 
           return ListView.separated(
