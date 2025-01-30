@@ -5,7 +5,7 @@ mixin ParseObjectComparison on ParseObject {
   /// Compares the `objectId` of the current object with another ParseObject's `objectId`.
   ///
   /// Returns `true` if the IDs are the same, otherwise returns `false`.
-  bool compareId(ParseObject other) => objectId == other.objectId;
+  bool compareId(ParseObject? other) => objectId == other?.objectId;
 
   @override
   bool operator ==(Object other) {
