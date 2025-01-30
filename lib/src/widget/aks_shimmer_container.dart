@@ -85,8 +85,8 @@ class AksShimmerContainer extends StatelessWidget {
     final constants = AksInternal.config.appConstants;
 
     return SizedBox(
-      width: width,
-      height: height,
+      width: width ?? double.infinity,
+      height: height ?? double.infinity,
       child: Shimmer.fromColors(
         baseColor: baseColor ?? context.colorScheme.primary.withValues(alpha: 0.3),
         highlightColor: highlightColor ?? context.colorScheme.primary.withValues(alpha: 0.1),
