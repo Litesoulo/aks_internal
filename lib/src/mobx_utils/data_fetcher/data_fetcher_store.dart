@@ -17,8 +17,14 @@ abstract class _DataFetcherStoreBase<T> with Store {
   /// Creates a new instance of the data fetcher store.
   ///
   /// [dataFetcher] is a required function that fetches a list of items asynchronously.
+  ///
+  /// [afterFetch] is an optional callback that is executed after the fetch operation
+  /// completes, regardless of whether it succeeds or fails. This can be used to perform
+  /// additional actions, such as logging, updating other parts of the application, or
+  /// triggering side effects.
   _DataFetcherStoreBase({
     required Future<List<T>> Function() dataFetcher,
+    this.afterFetch,
   }) : _dataFetcher = dataFetcher;
 
   /// The function responsible for fetching data asynchronously.
@@ -50,6 +56,16 @@ abstract class _DataFetcherStoreBase<T> with Store {
   @computed
   bool get hasError => _itemsFuture.status == FutureStatus.rejected;
 
+  /// An optional callback that is executed after the fetch operation completes,
+  /// regardless of whether it succeeds or fails.
+  ///
+  /// This can be used to perform additional actions, such as:
+  /// - Logging the result of the fetch operation.
+  /// - Updating other parts of the application.
+  /// - Triggering side effects like notifications or analytics events.
+  ///
+  final Future<void> Function()? afterFetch;
+
   /// Fetches data using the provided data fetching function.
   ///
   /// If a fetch operation is already in progress, this method does nothing.
@@ -79,6 +95,10 @@ abstract class _DataFetcherStoreBase<T> with Store {
       items
         ..clear()
         ..addAll(_backupItems);
+    } finally {
+      if (afterFetch != null) {
+        await afterFetch?.call();
+      }
     }
   }
 }
