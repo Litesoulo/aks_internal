@@ -49,7 +49,7 @@ class AksCachedImage extends StatelessWidget {
   });
 
   /// The URL of the image to display.
-  final String imageUrl;
+  final String? imageUrl;
 
   /// The image provider to use.
   final CachedNetworkImageProvider? cachedImageProvider;
@@ -118,7 +118,7 @@ class AksCachedImage extends StatelessWidget {
         return OctoImage(
           width: width,
           height: height,
-          image: cachedImageProvider ?? CachedNetworkImageProvider(imageUrl),
+          image: cachedImageProvider ?? CachedNetworkImageProvider(imageUrl ?? ''),
           imageBuilder: imageBuilder,
           placeholderBuilder: placeholderBuilder,
           progressIndicatorBuilder: progressIndicatorBuilder,
