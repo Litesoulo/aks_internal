@@ -218,7 +218,7 @@ void main() {
       // Arrange
       when(() => mockDataFetcher.call()).thenAnswer((_) async => ['Item 1', 'Item 2', 'Item 3']);
 
-      const padding = EdgeInsets.all(16.0);
+      const padding = EdgeInsets.all(16);
 
       // Create the widget under test with padding
       await tester.pumpWidget(

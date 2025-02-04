@@ -35,6 +35,7 @@ class InfiniteListWidget<T> extends StatelessWidget {
     this.scrollDirection = Axis.vertical,
     this.width,
     this.height,
+    this.initialItem,
   });
 
   /// The store that manages the state of the infinite list and fetches data.
@@ -67,6 +68,13 @@ class InfiniteListWidget<T> extends StatelessWidget {
   /// If non-null, requires the child to have exactly this width.
   final double? width;
 
+  /// An optional widget to display as the first item in the list.
+  ///
+  /// When provided, this widget is added at the beginning of the list, increasing the
+  /// total item count by 1. The remaining items from the [store] will be rendered
+  /// starting from index 1 onward using the [itemBuilder].
+  final Widget? initialItem;
+
   @override
   Widget build(BuildContext context) {
     final config = AksInternal.config;
@@ -80,7 +88,7 @@ class InfiniteListWidget<T> extends StatelessWidget {
       child: Observer(
         builder: (_) {
           return InfiniteList(
-            itemCount: store.itemCount,
+            itemCount: store.itemCount + (initialItem == null ? 0 : 1),
             isLoading: store.isBusy,
             onFetchData: store.hasReachedMax ? _emptyCallback : store.fetch,
             separatorBuilder: separatorBuilder ?? defaultSeparatorBuilder,
@@ -93,10 +101,18 @@ class InfiniteListWidget<T> extends StatelessWidget {
             hasReachedMax: store.hasReachedMax,
             padding: padding ?? EdgeInsets.all(config.appConstants.padding),
             scrollDirection: this.scrollDirection,
-            itemBuilder: (context, index) => itemBuilder(
-              context,
-              store.items[index],
-            ),
+            itemBuilder: (context, index) {
+              if (initialItem != null && index == 0) {
+                return initialItem!;
+              }
+
+              final idx = index - (initialItem == null ? 0 : 1);
+
+              return itemBuilder(
+                context,
+                store.items[idx],
+              );
+            },
           );
         },
       ),
