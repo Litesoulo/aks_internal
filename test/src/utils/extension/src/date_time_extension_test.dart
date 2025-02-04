@@ -27,40 +27,40 @@ void main() {
 
     test('isBetween should return true for a date within the range', () {
       final date = DateTime(2023, 10, 15);
-      final startDate = DateTime(2023, 10, 1);
+      final startDate = DateTime(2023, 10);
       final endDate = DateTime(2023, 10, 31);
       expect(date.isBetween(startDate, endDate), isTrue);
     });
 
     test('isBetween should return false for a date outside the range', () {
-      final date = DateTime(2023, 11, 1);
-      final startDate = DateTime(2023, 10, 1);
+      final date = DateTime(2023, 11);
+      final startDate = DateTime(2023, 10);
       final endDate = DateTime(2023, 10, 31);
       expect(date.isBetween(startDate, endDate), isFalse);
     });
 
     test('addDays should add the specified number of days', () {
-      final date = DateTime(2023, 10, 1);
+      final date = DateTime(2023, 10);
       final newDate = date.addDays(5);
       expect(newDate, DateTime(2023, 10, 6));
     });
 
     test('addMonths should add the specified number of months', () {
-      final date = DateTime(2023, 10, 1);
+      final date = DateTime(2023, 10);
       final newDate = date.addMonths(2);
-      expect(newDate, DateTime(2023, 12, 1));
+      expect(newDate, DateTime(2023, 12));
     });
 
     test('addYears should add the specified number of years', () {
-      final date = DateTime(2023, 10, 1);
+      final date = DateTime(2023, 10);
       final newDate = date.addYears(1);
-      expect(newDate, DateTime(2024, 10, 1));
+      expect(newDate, DateTime(2024, 10));
     });
 
     test('subtractYears should subtract the specified number of years', () {
-      final date = DateTime(2023, 10, 1);
+      final date = DateTime(2023, 10);
       final newDate = date.subtractYears(1);
-      expect(newDate, DateTime(2022, 10, 1));
+      expect(newDate, DateTime(2022, 10));
     });
 
     test('startOfMonth should return the first day of the month', () {
@@ -75,7 +75,7 @@ void main() {
 
     test('startOfYear should return the first day of the year', () {
       final date = DateTime(2023, 10, 15);
-      expect(date.startOfYear, DateTime(2023, 1, 1));
+      expect(date.startOfYear, DateTime(2023));
     });
 
     test('endOfYear should return the last day of the year', () {
@@ -85,7 +85,7 @@ void main() {
 
     test('startOfDay should return the start of the day', () {
       final date = DateTime(2023, 10, 15, 14, 30);
-      expect(date.startOfDay, DateTime(2023, 10, 15, 0, 0, 0, 0, 0));
+      expect(date.startOfDay, DateTime(2023, 10, 15));
     });
 
     test('endOfDay should return the end of the day', () {

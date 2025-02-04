@@ -38,8 +38,8 @@ extension DateTimeExtension on DateTime {
   /// DateTime(2023, 11, 1).isBetween(DateTime(2023, 10, 1), DateTime(2023, 10, 31));  // Returns false
   /// ```
   bool isBetween(DateTime startDate, DateTime endDate) {
-    final bool isAfterOrAtSameMoment = isAfter(startDate) || isAtSameMomentAs(startDate);
-    final bool isBeforeOrAtSameMoment = isBefore(endDate) || isAtSameMomentAs(endDate);
+    final isAfterOrAtSameMoment = isAfter(startDate) || isAtSameMomentAs(startDate);
+    final isBeforeOrAtSameMoment = isBefore(endDate) || isAtSameMomentAs(endDate);
 
     return isAfterOrAtSameMoment && isBeforeOrAtSameMoment;
   }
@@ -95,7 +95,7 @@ extension DateTimeExtension on DateTime {
   /// DateTime(2023, 10, 15).startOfMonth; // Returns DateTime(2023, 10, 1)
   /// ```
   DateTime get startOfMonth {
-    return DateTime(year, month, 1, 0, 0, 0, 0, 0);
+    return DateTime(year, month);
   }
 
   /// Returns the end of the month for the [DateTime].
@@ -116,7 +116,7 @@ extension DateTimeExtension on DateTime {
   /// DateTime(2023, 10, 15).startOfYear; // Returns DateTime(2023, 1, 1)
   /// ```
   DateTime get startOfYear {
-    return DateTime(year, 1, 1, 0, 0, 0, 0, 0);
+    return DateTime(year);
   }
 
   /// Returns the end of the year for the [DateTime].
@@ -137,7 +137,7 @@ extension DateTimeExtension on DateTime {
   /// DateTime(2023, 10, 15, 14, 30).startOfDay; // Returns DateTime(2023, 10, 15, 0, 0, 0, 0, 0)
   /// ```
   DateTime get startOfDay {
-    return DateTime(year, month, day, 0, 0, 0, 0, 0);
+    return DateTime(year, month, day);
   }
 
   /// Returns the end of the day for the [DateTime].
