@@ -32,6 +32,11 @@ class DataListWidget<T> extends StatelessWidget {
   /// [initialItem] An optional widget to display as the first item in the list.
   /// When provided, this widget is added at the beginning of the list, increasing the total item count by 1.
   /// The remaining items from the [store] will start rendering from index 1 onward.
+  ///
+  /// [shrinkWrap] Whether the list should shrink-wrap its contents. Defaults to `false`.
+  ///
+  /// [physics] The scroll physics for the list. Defines how the list responds to user input.
+  /// If `null`, the default physics for the current platform is used.
   const DataListWidget({
     required this.loadingBuilder,
     required this.store,
@@ -43,6 +48,8 @@ class DataListWidget<T> extends StatelessWidget {
     this.padding,
     this.initialItem,
     this.scrollDirection = Axis.vertical,
+    this.shrinkWrap = false,
+    this.physics,
     super.key,
   }) : assert(
           itemBuilder != null || customBuilder != null,
@@ -83,6 +90,16 @@ class DataListWidget<T> extends StatelessWidget {
   /// An optional [Axis] to be used by the internal [ScrollView] that defines the axis of scroll.
   final Axis scrollDirection;
 
+  /// Whether the list should shrink-wrap its contents.
+  ///
+  /// If `true`, the list takes up as little space as possible. Defaults to `false`.
+  final bool shrinkWrap;
+
+  /// The scroll physics for the list.
+  ///
+  /// Defines how the list responds to user input. If `null`, the platform's default is used.
+  final ScrollPhysics? physics;
+
   @override
   Widget build(BuildContext context) {
     final config = AksInternal.config;
@@ -112,6 +129,8 @@ class DataListWidget<T> extends StatelessWidget {
 
           return ListView.separated(
             padding: padding,
+            shrinkWrap: shrinkWrap,
+            physics: physics,
             itemCount: store.items.length + (initialItem == null ? 0 : 1),
             itemBuilder: (context, index) {
               if (initialItem != null && index == 0) {
