@@ -28,6 +28,10 @@ class DataListWidget<T> extends StatelessWidget {
   ///
   /// [separatorBuilder] is a function for building the widget that separates items in the list.
   /// If `null`, the default is an empty-sized box with 8 pixels of height.
+  ///
+  /// [initialItem] An optional widget to display as the first item in the list.
+  /// When provided, this widget is added at the beginning of the list, increasing the total item count by 1.
+  /// The remaining items from the [store] will start rendering from index 1 onward.
   const DataListWidget({
     required this.loadingBuilder,
     required this.store,
@@ -37,6 +41,7 @@ class DataListWidget<T> extends StatelessWidget {
     this.customBuilder,
     this.itemBuilder,
     this.padding,
+    this.initialItem,
     this.scrollDirection = Axis.vertical,
     super.key,
   }) : assert(
@@ -67,6 +72,13 @@ class DataListWidget<T> extends StatelessWidget {
 
   /// Builder for rendering separators between list items.
   final Widget Function(BuildContext context, int index)? separatorBuilder;
+
+  /// An optional widget to display as the first item in the list.
+  ///
+  /// When provided, this widget is added at the beginning of the list, increasing the
+  /// total item count by 1. The remaining items from the [store] will be rendered
+  /// starting from index 1 onward using the [itemBuilder].
+  final Widget? initialItem;
 
   /// An optional [Axis] to be used by the internal [ScrollView] that defines the axis of scroll.
   final Axis scrollDirection;
@@ -100,9 +112,15 @@ class DataListWidget<T> extends StatelessWidget {
 
           return ListView.separated(
             padding: padding,
-            itemCount: store.items.length,
+            itemCount: store.items.length + (initialItem == null ? 0 : 1),
             itemBuilder: (context, index) {
-              final item = store.items[index];
+              if (initialItem != null && index == 0) {
+                return initialItem!;
+              }
+
+              final idx = index - (initialItem == null ? 0 : 1);
+
+              final item = store.items[idx];
               return itemBuilder!(context, item);
             },
             scrollDirection: scrollDirection,
