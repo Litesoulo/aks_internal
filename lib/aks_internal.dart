@@ -19,7 +19,7 @@ export 'src/parse_sdk_base/parse_filter/parse_query_builder.dart'
         ParseQueryBuilder,
         RelatedToFilter;
 export 'src/parse_sdk_base/parse_sdk_base.dart' show ParseSdkBase;
-export 'src/parse_utils/parse_object_comparison.dart' show ParseObjectComparison;
+export 'src/parse_utils/parse_object_equality_mixin.dart' show ParseObjectEqualityMixin;
 export 'src/utils/extension/aks_extensions.dart'
     show BuildContextExtension, DateTimeExtension, DateTimeNullableExtension, FutureStatusExtension, StringExtension;
 export 'src/utils/logger/aks_logger.dart' show AksLogger;
