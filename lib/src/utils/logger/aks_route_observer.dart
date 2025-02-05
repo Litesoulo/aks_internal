@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 ///
 /// This observer tracks push/pop/replace events in the navigation stack
 /// and provides detailed logging for debugging purposes.
-class AksGoRouterObserver extends NavigatorObserver {
+class AksRouteObserver extends NavigatorObserver {
   /// Logs a navigation event with the current route information
   void _logNavigationEvent(String event, {Route<dynamic>? current, Route<dynamic>? previous}) {
     final currentRoute = _getRouteInfo(current);

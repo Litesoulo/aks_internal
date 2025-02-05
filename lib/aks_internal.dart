@@ -22,8 +22,8 @@ export 'src/parse_sdk_base/parse_sdk_base.dart' show ParseSdkBase;
 export 'src/parse_utils/parse_object_equality_mixin.dart' show ParseObjectEqualityMixin;
 export 'src/utils/extension/aks_extensions.dart'
     show BuildContextExtension, DateTimeExtension, DateTimeNullableExtension, FutureStatusExtension, StringExtension;
-export 'src/utils/logger/aks_go_router_observer.dart' show AksGoRouterObserver;
 export 'src/utils/logger/aks_logger.dart' show AksLogger;
+export 'src/utils/logger/aks_route_observer.dart' show AksRouteObserver;
 export 'src/widget/aks_cached_image.dart' show AksCachedImage;
 export 'src/widget/aks_shimmer_container.dart' show AksShimmerContainer;
 export 'src/widget/data_list/data_list_widget.dart' show DataListWidget;
