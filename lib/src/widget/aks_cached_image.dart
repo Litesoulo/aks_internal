@@ -37,9 +37,6 @@ class AksCachedImage extends StatelessWidget {
     /// The box fit of the image.
     this.fit,
 
-    /// Whether to use the width to calculate the memory cache size.
-    this.useWidth = true,
-
     /// Whether to use gapless playback.
     this.gaplessPlayback = false,
 
@@ -79,9 +76,6 @@ class AksCachedImage extends StatelessWidget {
   /// The box fit of the image.
   final BoxFit? fit;
 
-  /// Whether to use the width to calculate the memory cache size.
-  final bool useWidth;
-
   /// Whether to use gapless playback.
   final bool gaplessPlayback;
 
@@ -90,47 +84,18 @@ class AksCachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final dpRatio = MediaQuery.devicePixelRatioOf(context);
-        int? memCacheWidth;
-        int? memCacheHeight;
-        if (useWidth) {
-          var size = width;
-          if (size != null && size.isInfinite) {
-            size = constraints.maxWidth;
-          }
-          size ??= constraints.maxWidth;
-          if (!size.isInfinite) {
-            memCacheHeight = (size * dpRatio).ceil();
-          }
-        } else {
-          var size = height;
-          if (size != null && size.isInfinite) {
-            size = constraints.maxHeight;
-          }
-          size ??= constraints.maxHeight;
-          if (!size.isInfinite) {
-            memCacheWidth = (size * dpRatio).ceil();
-          }
-        }
-
-        return OctoImage(
-          width: width,
-          height: height,
-          image: cachedImageProvider ?? CachedNetworkImageProvider(imageUrl ?? ''),
-          imageBuilder: imageBuilder,
-          placeholderBuilder: placeholderBuilder,
-          progressIndicatorBuilder: progressIndicatorBuilder,
-          errorBuilder: errorBuilder,
-          gaplessPlayback: gaplessPlayback,
-          memCacheWidth: memCacheWidth,
-          memCacheHeight: memCacheHeight,
-          filterQuality: filterQuality,
-          fit: fit,
-          color: color,
-        );
-      },
+    return OctoImage(
+      width: width,
+      height: height,
+      image: cachedImageProvider ?? CachedNetworkImageProvider(imageUrl ?? ''),
+      imageBuilder: imageBuilder,
+      placeholderBuilder: placeholderBuilder,
+      progressIndicatorBuilder: progressIndicatorBuilder,
+      errorBuilder: errorBuilder,
+      gaplessPlayback: gaplessPlayback,
+      filterQuality: filterQuality,
+      fit: fit,
+      color: color,
     );
   }
 }
