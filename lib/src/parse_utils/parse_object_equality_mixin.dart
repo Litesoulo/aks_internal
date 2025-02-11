@@ -1,76 +1,62 @@
+import 'package:collection/collection.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 /// A mixin for comparing `ParseObject` instances based on their properties and IDs.
-///
-/// This mixin provides methods to compare two `ParseObject` instances for equality
-/// by excluding certain metadata keys (e.g., `ACL`, `createdAt`, `updatedAt`).
-/// It also overrides the `==` operator and `hashCode` to ensure consistent behavior
-/// when comparing objects.
 mixin ParseObjectEqualityMixin on ParseObject {
-  /// Compares the `objectId` of the current `ParseObject` with another `ParseObject`'s `objectId`.
-  ///
-  /// This method is useful for quickly checking if two objects represent the same entity
-  /// in the Parse database.
-  ///
-  /// - [other]: The other `ParseObject` to compare with. Can be `null`.
-  /// - Returns `true` if the `objectId` of both objects is the same, otherwise `false`.
-  bool compareId(ParseObject? other) => objectId == other?.objectId;
+  static const _collectionEquality = DeepCollectionEquality();
 
   /// A list of keys to exclude from equality comparisons.
-  ///
-  /// These keys typically represent metadata (e.g., `ACL`, `createdAt`, `updatedAt`)
-  /// that should not be considered when determining if two objects are equal.
-  final _keysToExclude = [
+  static const Set<String> _keysToExclude = {
     keyVarAcl,
     keyVarCreatedAt,
     keyVarUpdatedAt,
-  ];
+  };
 
-  /// Compares the current `ParseObject` with another object for equality.
-  ///
-  /// This method overrides the `==` operator to compare two `ParseObject` instances
-  /// based on their properties, excluding the keys specified in `_keysToExclude`.
-  ///
-  /// - [other]: The object to compare with.
-  /// - Returns `true` if the objects are considered equal, otherwise `false`.
+  /// Compares the `objectId` of the current `ParseObject` with another `ParseObject`'s `objectId`.
+  bool compareId(ParseObject? other) => objectId == other?.objectId;
+
   @override
   bool operator ==(Object other) {
-    // If the objects are identical, they are equal.
     if (identical(this, other)) return true;
 
-    // If the runtime types don't match, the objects are not equal.
-    if (runtimeType != other.runtimeType) return false;
+    if (other is! ParseObject || runtimeType != other.runtimeType) return false;
 
-    // If the other object is not a `ParseObject`, they are not equal.
-    if (other is! ParseObject) return false;
+    assert(other is ParseObjectEqualityMixin, 'Other object is not extending `ParseObjectEqualityMixin`');
 
-    // Compare the properties of both objects, excluding the keys in `_keysToExclude`.
+    // Filter out excluded keys from the `toJson()` output for both objects
     final properties = toJson();
-    for (final key in properties.keys) {
-      if (_keysToExclude.contains(key)) continue;
+    final filteredProperties = Map.fromEntries(
+      properties.entries.where((entry) => !_keysToExclude.contains(entry.key)),
+    );
 
-      if (get<dynamic>(key) != other.get<dynamic>(key)) {
-        return false;
-      }
-    }
+    final otherProperties = other.toJson();
+    final otherFilteredProperties = Map.fromEntries(
+      otherProperties.entries.where((entry) => !_keysToExclude.contains(entry.key)),
+    );
 
-    return true;
+    return _collectionEquality.equals(filteredProperties, otherFilteredProperties);
   }
 
-  /// Generates a hash code for the current `ParseObject`.
-  ///
-  /// This method overrides `hashCode` to ensure that two objects considered equal
-  /// by the `==` operator also have the same hash code. The hash code is computed
-  /// based on the object's properties, excluding the keys in `_keysToExclude`.
-  ///
-  /// - Returns an integer representing the hash code of the object.
   @override
-  int get hashCode => Object.hashAll(
-        toJson()
-            .keys
-            .where(
-              (key) => !_keysToExclude.contains(key),
-            )
-            .map(get),
-      );
+  int get hashCode {
+    final properties = toJson();
+    final filteredProperties = Map.fromEntries(
+      properties.entries.where((entry) => !_keysToExclude.contains(entry.key)),
+    );
+
+    return Object.hashAll(
+      filteredProperties.entries.map((e) => Object.hash(e.key, _hashValue(e.value))),
+    );
+  }
+
+  /// Ensures proper hashing of collections and `ParseObject` instances.
+  int _hashValue(dynamic value) {
+    if (value is ParseObject) return value.hashCode;
+    if (value is Iterable) return Object.hashAll(value.map(_hashValue));
+    if (value is Map) {
+      final sortedEntries = value.entries.toList()..sort((a, b) => a.key.toString().compareTo(b.key.toString()));
+      return Object.hashAll(sortedEntries.map((e) => Object.hash(_hashValue(e.key), _hashValue(e.value))));
+    }
+    return value?.hashCode ?? 0;
+  }
 }
