@@ -1,3 +1,4 @@
+import 'package:aks_internal/aks_internal.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
@@ -91,7 +92,10 @@ class AksCachedImage extends StatelessWidget {
       imageBuilder: imageBuilder,
       placeholderBuilder: placeholderBuilder,
       progressIndicatorBuilder: progressIndicatorBuilder,
-      errorBuilder: errorBuilder,
+      errorBuilder: errorBuilder ??
+          (context, _, __) => AksInternal.config.aksDefaultBuilders.errorImageBuilder != null
+              ? AksInternal.config.aksDefaultBuilders.errorImageBuilder!(context)
+              : Space.empty,
       gaplessPlayback: gaplessPlayback,
       filterQuality: filterQuality,
       fit: fit,

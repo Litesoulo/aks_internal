@@ -13,9 +13,11 @@ class AksDefaultBuilders {
   ///
   /// - [horizontalSeparatorBuilder]: A builder function for creating a custom horizontal separator widget.
   /// - [verticalSeparatorBuilder]: A builder function for creating a custom vertical separator widget.
+  /// - [errorImageBuilder]: A builder function for creating a custom widget when an image is unavailable.
   AksDefaultBuilders({
     required this.horizontalSeparatorBuilder,
     required this.verticalSeparatorBuilder,
+    this.errorImageBuilder,
   });
 
   /// A builder function for creating a custom horizontal separator widget.
@@ -29,4 +31,10 @@ class AksDefaultBuilders {
   /// Similar to [horizontalSeparatorBuilder], but for vertical separators. The function provides the
   /// [BuildContext] and the index to create vertical separators dynamically.
   final Widget Function(BuildContext, int) verticalSeparatorBuilder;
+
+  /// A builder function for creating a custom widget when an image is unavailable.
+  ///
+  /// This function provides the [BuildContext] and allows defining a placeholder widget to display when
+  /// there is no image available. If not provided, no default widget is used.
+  final Widget Function(BuildContext)? errorImageBuilder;
 }
