@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:aks_internal/src/mobx_utils/data_fetcher/data_fetcher_store.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -85,6 +87,57 @@ void main() {
       expect(store.items, equals(secondFetchItems));
       expect(store.isLoading, isFalse);
       expect(store.hasError, isFalse);
+    });
+
+    Widget createTestWidget() {
+      return MaterialApp(
+        home: Scaffold(
+          body: Observer(
+            builder: (_) {
+              if (store.isLoading) {
+                return const CircularProgressIndicator();
+              }
+              if (store.hasError) {
+                return const Text('Error');
+              }
+              return ListView(
+                children: store.items.map((item) => Text(item, key: ValueKey(item))).toList(),
+              );
+            },
+          ),
+        ),
+      );
+    }
+
+    testWidgets('UI updates when store items change', (tester) async {
+      // Make fetch slow enough to see loading
+      when(() => mockDataFetcher.call()).thenAnswer(
+        (_) async => Future.delayed(
+          const Duration(milliseconds: 100),
+          () => ['Item A', 'Item B'],
+        ),
+      );
+
+      await tester.pumpWidget(createTestWidget());
+
+      // Initially empty
+      expect(find.text('Item A'), findsNothing);
+      expect(find.text('Item B'), findsNothing);
+
+      // Start fetch without awaiting
+      unawaited(store.fetch());
+
+      // Pump once to catch loading state
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Let future finish
+      await tester.pumpAndSettle();
+
+      // Now data should be visible
+      expect(find.text('Item A'), findsOneWidget);
+      expect(find.text('Item B'), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
     });
   });
 }
